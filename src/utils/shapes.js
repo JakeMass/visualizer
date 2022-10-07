@@ -9,9 +9,15 @@ class Shape {
     constructor(canvasCtx, audioCtx, props) {
         this.#canvasCtx = canvasCtx
         this.#audioCtx = audioCtx
-        this.#props = props
+        this.#props = {
+            resolution: 2048, 
+            ...props
+        }
 
-        this.analyzer = new AnalyserNode(this.#audioCtx)
+        this.analyzer = new AnalyserNode(this.#audioCtx, {
+            fftSize: this.#props.resolution
+        })
+
         this.#dataArray = new Uint8Array(this.analyzer.frequencyBinCount)
     }
 
@@ -37,13 +43,14 @@ class Shape {
     }
 
     updateProps(props, debug=false) {
-        debug && console.log(props)
         this.#props = {
             ...this.#props,
             ...props,
         }
 
-        debug && console.log('new:', this.props )
+        if (props.resolution) {
+            this.analyzer.fftSize = props.resolution
+        }
     }
 }
 
@@ -68,6 +75,12 @@ export class Circle extends Shape {
                 max: 1000,
                 min: 1,
                 step: 1,
+            },
+            resolution: {
+                name: 'Resolution',
+                max: 32768,
+                min: 32,
+                step: this.analyzer.fftSize,
             },
             max_angle: {
                 name: 'Maximum Angle',

@@ -1,30 +1,13 @@
 <template>
   <div>
     <HeaderMenu 
+      :shapes="shapes"
       :url="url"
       @file="onFileInput"
       @play="onPlay" />
     <canvas
       id="canvas"
       style="height: 75vh; width: 100vw;"></canvas>
-    
-    <div 
-      v-for="(shape, index) in shapes"
-      style="display: flex"
-      :key="index">
-      <h2>Shape {{ index + 1 }}</h2>
-      <div
-        v-for="[key, prop] in Object.entries(shape.propsInfo)"
-        :key="key" >
-        <h3>{{ prop.name }}</h3>
-        <input 
-          type="range"
-          :min="prop.min ?? 0"
-          :max="prop.max ?? 1"
-          :step="prop.step ?? 0.1"
-          @input="onInput($event, shape, key)">
-      </div>
-    </div>
   </div>
 </template>
 
@@ -71,12 +54,6 @@ function onPlay() {
   }
 
   playing.value = !playing.value
-}
-
-function onInput({ target }, shape, key) {
-  toRaw(shape).updateProps({
-    [`${key}`]: parseFloat(target.value)
-  }, true)
 }
 
 function audioInit() {
