@@ -2,11 +2,13 @@
   <div>
     <input 
       type="range"
+      :value="width"
       :max="maxWidth"
       :min="100"
       @change="onWidthChange">
     <input 
       type="range"
+      :value="height"
       :max="maxHeight"
       :min="100"
       @change="onHeightChange">

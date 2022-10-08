@@ -23,14 +23,16 @@
         :key="index"
         class="controle">
         <h3 
-          style="cursor: pointer;"
+          style="cursor: pointer; margin: 7px;"
           @click="onShapeChange(index)">
           {{ toRaw(shape).type }} {{ index + 1 }}
         </h3>
         <ShapeControle 
           class="props"
           v-if="activeShapeIndex === index"
-          :shape="shape" />
+          :shape="shape"
+          :index="index"
+          @shape:replace="onReplace" />
       </div>
     </div>
   </div>
@@ -41,7 +43,7 @@ import { ref, toRaw } from 'vue'
 import ShapeControle from './ShapeControle.vue'
 import CanvasControle from './CanvasControle.vue'
 
-const emit = defineEmits(['file', 'play'])
+const emit = defineEmits(['file', 'play', 'shape:replace'])
 const props = defineProps({
   canvas: HTMLCanvasElement,
   shapes: Array,
@@ -64,6 +66,11 @@ function onPlay() {
 
 function onFileInput({ target }) {
   emit('file', target.files[0])
+}
+
+function onReplace(value) {
+  console.log(value)
+  emit('shape:replace', value)
 }
 </script>
 

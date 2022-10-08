@@ -5,7 +5,8 @@
       :shapes="shapes"
       :url="url"
       @file="onFileInput"
-      @play="onPlay" />
+      @play="onPlay"
+      @shape:replace="onReplace" />
     <canvas
       id="canvas"
       style="height: 75vh; width: 100vw; z-index: -1"></canvas>
@@ -13,7 +14,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, toRaw } from 'vue'
 import { Circle, Line } from '../utils/shapes'
 import HeaderMenu from './HeaderMenu.vue'
 
@@ -25,7 +26,6 @@ let playing = ref(false)
 const audioCtx = new AudioContext()
 
 let canvas = ref(null)
-console.log(canvas)
 let canvasCtx = null
 
 let circleShape = null
@@ -36,6 +36,12 @@ let shapes = ref([])
 function onFileInput(input) {
   file.value = input
   url.value = URL.createObjectURL(file.value)
+}
+
+function onReplace({ index, nShape }) {
+  shapes.value.splice(index, 1, nShape)
+
+  console.log(shapes.value)
 }
 
 function onPlay() {
@@ -91,8 +97,7 @@ function draw() {
   canvasCtx.strokeStyle = 'rgb(200, 200, 200)'
   canvasCtx.beginPath()
 
-  circleShape.draw()
-  lineShape.draw()
+  shapes.value.forEach(shape => toRaw(shape).draw())
 
   canvasCtx.translate(-0.5, -0.5)
 }

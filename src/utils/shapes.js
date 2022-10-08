@@ -6,6 +6,7 @@ class Shape {
     #audioCtx
     #canvasCtx
     #type
+    #source
 
     constructor(canvasCtx, audioCtx, type, props) {
         this.#canvasCtx = canvasCtx
@@ -21,6 +22,18 @@ class Shape {
         })
 
         this.#dataArray = new Uint8Array(this.analyzer.frequencyBinCount)
+    }
+
+    get basePropInfo() {
+        return {
+            type: {
+                name: 'Type',
+                options: [
+                    'line',
+                    'circle',
+                ],
+            }
+        }
     }
 
     get props() {
@@ -39,9 +52,19 @@ class Shape {
         return this.#canvasCtx
     }
 
+    get audioCtx() {
+        return this.#audioCtx
+    }
+
+    get source() {
+        return this.#source
+    }
+
     connect(source) {
         this.analyzer.disconnect()
         source.connect(this.analyzer)
+
+        this.#source = source
     }
 
     analyze() {
@@ -76,6 +99,7 @@ export class Circle extends Shape {
 
     get propsInfo() {
         return {
+            ...this.basePropInfo,
             radius: {
                 name: 'Radius',
                 max: 1000,
@@ -150,6 +174,7 @@ export class Line extends Shape {
 
     get propsInfo() {
         return {
+            ...this.basePropInfo,
             width: {
                 name: 'Width',
                 max: 10000,
