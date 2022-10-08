@@ -1,19 +1,19 @@
 <template>
   <div>
     <HeaderMenu 
+      :canvas="canvas"
       :shapes="shapes"
       :url="url"
       @file="onFileInput"
       @play="onPlay" />
     <canvas
       id="canvas"
-      style="height: 75vh; width: 100vw;"></canvas>
+      style="height: 75vh; width: 100vw; z-index: -1"></canvas>
   </div>
 </template>
 
 <script setup>
-import { computed, ref, toRaw } from 'vue'
-import { line, circle } from '../utils/patterns'
+import { ref } from 'vue'
 import { Circle, Line } from '../utils/shapes'
 import HeaderMenu from './HeaderMenu.vue'
 
@@ -24,12 +24,9 @@ let playing = ref(false)
 
 const audioCtx = new AudioContext()
 
-let canvas = null
+let canvas = ref(null)
+console.log(canvas)
 let canvasCtx = null
-
-let rotation = ref(0)
-let intensity = ref(0)
-let angleWidth = ref(360)
 
 let circleShape = null
 let lineShape = null
@@ -61,8 +58,8 @@ function audioInit() {
   let source = audioCtx.createMediaElementSource(audioElem)
   source.connect(audioCtx.destination)
 
-  canvas = document.getElementById('canvas')
-  canvasCtx = canvas.getContext('2d')
+  canvas.value = document.getElementById('canvas')
+  canvasCtx = canvas.value.getContext('2d')
 
   circleShape = new Circle(canvasCtx, audioCtx)
   circleShape.connect(source)
@@ -74,11 +71,11 @@ function audioInit() {
 
   shapes.value.push(lineShape)
 
-  canvas.height = document.documentElement.clientHeight * window.devicePixelRatio
-  canvas.width = document.documentElement.clientWidth * window.devicePixelRatio
+  canvas.value.height = document.documentElement.clientHeight * window.devicePixelRatio
+  canvas.value.width = document.documentElement.clientWidth * window.devicePixelRatio
 
-  canvas.style.height = canvas.height / window.devicePixelRatio + 'px'
-  canvas.style.width = canvas.width / window.devicePixelRatio + 'px'
+  canvas.value.style.height = canvas.value.height / window.devicePixelRatio + 'px'
+  canvas.value.style.width = canvas.value.width / window.devicePixelRatio + 'px'
 }
 
 function draw() {
@@ -88,7 +85,7 @@ function draw() {
 
   canvasCtx.translate(0.5, 0.5)
   canvasCtx.fillStyle = '#242424'
-  canvasCtx.fillRect(0, 0, canvas.width, canvas.height)
+  canvasCtx.fillRect(0, 0, canvas.value.width, canvas.value.height)
 
   canvasCtx.lineWidth = 1
   canvasCtx.strokeStyle = 'rgb(200, 200, 200)'

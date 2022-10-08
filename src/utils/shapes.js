@@ -5,10 +5,12 @@ class Shape {
     #dataArray
     #audioCtx
     #canvasCtx
+    #type
 
-    constructor(canvasCtx, audioCtx, props) {
+    constructor(canvasCtx, audioCtx, type, props) {
         this.#canvasCtx = canvasCtx
         this.#audioCtx = audioCtx
+        this.#type = type
         this.#props = {
             resolution: 2048, 
             ...props
@@ -23,6 +25,10 @@ class Shape {
 
     get props() {
         return this.#props
+    }
+
+    get type() {
+        return this.#type
     }
 
     get dataArray() {
@@ -49,7 +55,7 @@ class Shape {
         }
 
         if (props.resolution) {
-            this.analyzer.fftSize = props.resolution
+            this.analyzer.fftSize = Math.pow(2, props.resolution)
         }
     }
 }
@@ -57,7 +63,7 @@ class Shape {
 export class Circle extends Shape {
 
     constructor(canvasCtx, audioCtx, props = {}) {
-        super(canvasCtx, audioCtx, {
+        super(canvasCtx, audioCtx, 'circle', {
             radius: 300,
             max_angle: 360,
             x_offset: 0,
@@ -78,9 +84,9 @@ export class Circle extends Shape {
             },
             resolution: {
                 name: 'Resolution',
-                max: 32768,
-                min: 32,
-                step: this.analyzer.fftSize,
+                max: 15,
+                min: 5,
+                step: 1,
             },
             max_angle: {
                 name: 'Maximum Angle',
@@ -133,7 +139,7 @@ export class Circle extends Shape {
 export class Line extends Shape {
 
     constructor(canvasCtx, audioCtx, props = {}) {
-        super(canvasCtx, audioCtx, {
+        super(canvasCtx, audioCtx, 'line', {
             width: 600,
             x_offset: 0,
             y_offset: 0,
@@ -148,6 +154,12 @@ export class Line extends Shape {
                 name: 'Width',
                 max: 10000,
                 min: 1,
+                step: 1,
+            },
+            resolution: {
+                name: 'Resolution',
+                max: 15,
+                min: 5,
                 step: 1,
             },
             x_offset: {
