@@ -5,6 +5,7 @@
       :shapes="shapes"
       :url="url"
       @file="onFileInput"
+      @opacity:change="onOpacityChange"
       @play="onPlay"
       @shape:replace="onReplace"
       @shape:delete="onDelete"
@@ -30,6 +31,7 @@ let source = null
 
 let canvas = ref(null)
 let canvasCtx = null
+let opacity = ref(1)
 
 let circleShape = null
 let lineShape = null
@@ -40,6 +42,10 @@ function onAdd() {
   let nShape = new Circle(canvasCtx, audioCtx)
   nShape.connect(source)
   shapes.value.push(nShape)
+}
+
+function onOpacityChange(value) {
+  opacity.value = value
 }
 
 function onDelete(index) {
@@ -101,7 +107,7 @@ function draw() {
   if (!playing.value) return
 
   canvasCtx.translate(0.5, 0.5)
-  canvasCtx.fillStyle = '#242424'
+  canvasCtx.fillStyle = `rgba(0, 0, 0, ${opacity.value})`
   canvasCtx.fillRect(0, 0, canvas.value.width, canvas.value.height)
 
   canvasCtx.lineWidth = 1

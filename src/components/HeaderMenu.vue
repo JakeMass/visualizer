@@ -16,7 +16,8 @@
       <div
         v-if="canvas">
         <CanvasControle 
-          :canvas="canvas" />
+          :canvas="canvas"
+          @opacity:change="onOpacityChange" />
       </div>
       <div 
         v-for="(shape, index) in shapes"
@@ -45,7 +46,7 @@ import { ref, toRaw } from 'vue'
 import ShapeControle from './ShapeControle.vue'
 import CanvasControle from './CanvasControle.vue'
 
-const emit = defineEmits(['file', 'play', 'shape:replace', 'shape:delete', 'shape:add'])
+const emit = defineEmits(['file', 'play', 'shape:replace', 'shape:delete', 'shape:add', 'opacity:change'])
 const props = defineProps({
   canvas: HTMLCanvasElement,
   shapes: Array,
@@ -72,6 +73,10 @@ function onShapeChange(index) {
 
 function onPlay() {
   emit('play')
+}
+
+function onOpacityChange(value) {
+  emit('opacity:change', value)
 }
 
 function onFileInput({ target }) {
