@@ -1,28 +1,35 @@
 <template>
-  <div
-    v-for="[key, prop] in Object.entries(shape.propsInfo)"
-    :key="key" >
-    <h3>{{ prop.name }}</h3>
-    <select 
-      v-if="key === 'type'"
-      :value="toRaw(shape).type"
-      @change="onTypeChange($event, shape, index)">
-      <option
-        v-for="item, index in prop.options" 
-        :key="index"
-        :value="item">
-          {{ item.toUpperCase() }}
-        </option>
-    </select>
-    <input 
-      v-else
-      type="range"
-      :value="toRaw(shape).props[key]"
-      :min="prop.min ?? 0"
-      :max="prop.max ?? 1"
-      :step="prop.step ?? 0.1"
-      @input="onInput($event, shape, key)">
-  </div> 
+  <div>
+    <button @click="onDelete(index)">Delete</button>
+    <div
+      class="prop_controle"
+      v-for="[key, prop] in Object.entries(shape.propsInfo)"
+      :key="key" >
+      <p
+        style="margin: 0;">
+        {{ prop.name }}
+      </p>
+      <select 
+        v-if="key === 'type'"
+        :value="toRaw(shape).type"
+        @change="onTypeChange($event, shape, index)">
+        <option
+          v-for="item, index in prop.options" 
+          :key="index"
+          :value="item">
+            {{ item.toUpperCase() }}
+          </option>
+      </select>
+      <input 
+        v-else
+        type="range"
+        :value="toRaw(shape).props[key]"
+        :min="prop.min ?? 0"
+        :max="prop.max ?? 1"
+        :step="prop.step ?? 0.1"
+        @input="onInput($event, shape, key)">
+    </div> 
+  </div>
 </template>
 
 <script setup>
@@ -34,12 +41,16 @@ const props = defineProps({
   index: Number,
 })
 
-const emit = defineEmits(['shape:change', 'shape:replace'])
+const emit = defineEmits(['shape:change', 'shape:replace', 'shape:delete'])
 
 function onInput({ target }, shape, key) {
   toRaw(shape).updateProps({
     [`${key}`]: parseFloat(target.value)
   }, true)
+}
+
+function onDelete(index) {
+  emit('shape:delete', index)
 }
 
 function onTypeChange({ target }, shape, index) {
@@ -71,3 +82,11 @@ function onTypeChange({ target }, shape, index) {
   }
 }
 </script>
+
+<style scoped>
+.prop_controle {
+  display: grid;
+  grid-auto-flow: row;
+  align-items: center;
+}
+</style>

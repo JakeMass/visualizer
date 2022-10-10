@@ -22,19 +22,21 @@
         v-for="(shape, index) in shapes"
         :key="index"
         class="controle">
-        <h3 
+        <p 
           style="cursor: pointer; margin: 7px;"
           @click="onShapeChange(index)">
           {{ toRaw(shape).type }} {{ index + 1 }}
-        </h3>
-        <ShapeControle 
-          class="props"
-          v-if="activeShapeIndex === index"
-          :shape="shape"
-          :index="index"
-          @shape:replace="onReplace" />
+        </p>
       </div>
+      <button @click="onAdd">Add</button>
     </div>
+    <ShapeControle 
+      v-if="shapes[activeShapeIndex]"
+      class="props"
+      :shape="shapes[activeShapeIndex]"
+      :index="activeShapeIndex"
+      @shape:replace="onReplace"
+      @shape:delete="onDelete(activeShapeIndex)" />
   </div>
 </template>
 
@@ -43,7 +45,7 @@ import { ref, toRaw } from 'vue'
 import ShapeControle from './ShapeControle.vue'
 import CanvasControle from './CanvasControle.vue'
 
-const emit = defineEmits(['file', 'play', 'shape:replace'])
+const emit = defineEmits(['file', 'play', 'shape:replace', 'shape:delete', 'shape:add'])
 const props = defineProps({
   canvas: HTMLCanvasElement,
   shapes: Array,
@@ -51,6 +53,14 @@ const props = defineProps({
 })
 
 let activeShapeIndex = ref(-1)
+
+function onAdd() {
+  emit('shape:add')
+}
+
+function onDelete(index) {
+  emit('shape:delete', index)
+}
 
 function onShapeChange(index) {
   if (activeShapeIndex.value === index) {
@@ -69,7 +79,6 @@ function onFileInput({ target }) {
 }
 
 function onReplace(value) {
-  console.log(value)
   emit('shape:replace', value)
 }
 </script>
@@ -80,13 +89,13 @@ function onReplace(value) {
   grid-auto-flow: column;
   justify-items: start;
   align-items: start;
-  grid-template-rows: auto;
+  grid-template-rows: 50px 50px;
   grid-template-columns: 100px 1fr 1fr;
   grid-template-areas: 
     "file player controles" 
     "props props props";
   width: 100%;
-  position: absolute;
+  position: fixed;
   top: 0;
 }
 
@@ -101,8 +110,9 @@ function onReplace(value) {
 
 .controles {
   grid-area: controles;
-  display: grid;
-  grid-auto-flow: column;
+  display: flex;
+  /* display: grid;
+  grid-auto-flow: column; */
 }
 
 .controle {

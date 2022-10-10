@@ -6,7 +6,9 @@
       :url="url"
       @file="onFileInput"
       @play="onPlay"
-      @shape:replace="onReplace" />
+      @shape:replace="onReplace"
+      @shape:delete="onDelete"
+      @shape:add="onAdd" />
     <canvas
       id="canvas"
       style="height: 75vh; width: 100vw; z-index: -1"></canvas>
@@ -24,6 +26,7 @@ let audioElem = null
 let playing = ref(false)
 
 const audioCtx = new AudioContext()
+let source = null
 
 let canvas = ref(null)
 let canvasCtx = null
@@ -33,6 +36,16 @@ let lineShape = null
 
 let shapes = ref([])
 
+function onAdd() {
+  let nShape = new Circle(canvasCtx, audioCtx)
+  nShape.connect(source)
+  shapes.value.push(nShape)
+}
+
+function onDelete(index) {
+  shapes.value.splice(index, 1)
+}
+
 function onFileInput(input) {
   file.value = input
   url.value = URL.createObjectURL(file.value)
@@ -40,8 +53,6 @@ function onFileInput(input) {
 
 function onReplace({ index, nShape }) {
   shapes.value.splice(index, 1, nShape)
-
-  console.log(shapes.value)
 }
 
 function onPlay() {
@@ -61,7 +72,7 @@ function onPlay() {
 
 function audioInit() {
   audioElem = document.getElementById('audio')
-  let source = audioCtx.createMediaElementSource(audioElem)
+  source = audioCtx.createMediaElementSource(audioElem)
   source.connect(audioCtx.destination)
 
   canvas.value = document.getElementById('canvas')
