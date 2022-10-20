@@ -110,7 +110,11 @@ class Shape {
         }
     }
 
-    initDraw() {
+    initDraw(mutator = null) {
+        if (mutator) {
+            mutator.mutate(this)
+        }
+
         this.canvasCtx.lineWidth = this.props.lineWeight;
         this.canvasCtx.strokeStyle = `rgb(${this.props.red},${this.props.green},${this.props.blue})`
     }
@@ -176,9 +180,9 @@ export class Circle extends Shape {
         }
     }
 
-    draw() {
+    draw(mutator = null) {
         this.analyze()
-        this.initDraw()
+        this.initDraw(mutator)
         this.canvasCtx.beginPath()
         circle(
             this.canvasCtx, 
