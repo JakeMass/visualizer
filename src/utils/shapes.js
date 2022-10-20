@@ -99,7 +99,7 @@ class Shape {
         this.analyzer.getByteTimeDomainData(this.#dataArray)
     }
 
-    updateProps(props, debug=false) {
+    updateProps(props) {
         this.#props = {
             ...this.#props,
             ...props,

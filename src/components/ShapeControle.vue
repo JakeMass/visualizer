@@ -47,7 +47,7 @@ const emit = defineEmits(['shape:change', 'shape:replace', 'shape:delete'])
 function onInput({ target }, shape, key) {
   toRaw(shape).updateProps({
     [`${key}`]: parseFloat(target.value)
-  }, true)
+  })
 }
 
 function onDelete(index) {
