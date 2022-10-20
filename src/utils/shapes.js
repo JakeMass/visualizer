@@ -246,9 +246,9 @@ export class Line extends Shape {
         }
     }
 
-    draw() {
+    draw(mutator = null) {
         this.analyze()
-        this.initDraw()
+        this.initDraw(mutator)
 
         this.canvasCtx.beginPath()
         line(

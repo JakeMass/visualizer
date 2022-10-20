@@ -142,9 +142,9 @@ function draw() {
   canvasCtx.translate(0.5, 0.5)
   canvasCtx.fillStyle = `rgba(0, 0, 0, ${opacity.value})`
   canvasCtx.fillRect(0, 0, canvas.value.width, canvas.value.height)
-  mutator.updateProps({
-    step: Math.random() * 255
-  })
+  // mutator.updateProps({
+  //   step: Math.random() * 255
+  // })
   shapes.value.forEach(shape => toRaw(shape).draw(mutator))
 
   canvasCtx.translate(-0.5, -0.5)
