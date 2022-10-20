@@ -6,7 +6,7 @@
       v-for="[key, prop] in Object.entries(shape.propsInfo)"
       :key="key" >
       <p
-        style="margin: 0;">
+        class="label">
         {{ prop.name }}
       </p>
       <select 
@@ -22,6 +22,7 @@
       </select>
       <input 
         v-else
+        class="slider"
         type="range"
         :value="toRaw(shape).props[key]"
         :min="prop.min ?? 0"
@@ -88,5 +89,22 @@ function onTypeChange({ target }, shape, index) {
   display: grid;
   grid-auto-flow: row;
   align-items: center;
+}
+
+.slider {
+  max-width: 10em;
+}
+
+.prop_controle .slider {
+  display: none;
+}
+
+.prop_controle:hover .slider {
+  display: block;
+}
+
+.label {
+  margin: 0px;
+  width: 100%;
 }
 </style>

@@ -16,8 +16,6 @@ export function line(canvasCtx, dataArray, bufferLength, width, x_offset, y_offs
 
         x += stepSize
     }
-
-    canvasCtx.stroke()
 }
 
 export function circle(canvasCtx, dataArray, bufferLength, radius, max_angle, x_offset, y_offset, a_offset, intensity) {
@@ -40,8 +38,6 @@ export function circle(canvasCtx, dataArray, bufferLength, radius, max_angle, x_
             canvasCtx.lineTo(x, y)
         }
     }
-
-    canvasCtx.stroke()
 }
 
 function toRadians(angle) {

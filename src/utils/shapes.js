@@ -14,6 +14,10 @@ class Shape {
         this.#type = type
         this.#props = {
             resolution: 2048, 
+            red: 255,
+            green: 255,
+            blue: 255,
+            lineWeight: 1,
             ...props
         }
 
@@ -32,7 +36,31 @@ class Shape {
                     'line',
                     'circle',
                 ],
-            }
+            },
+            red: {
+                name: 'Red',
+                max: 255,
+                min: 0,
+                step: 1
+            },
+            green: {
+                name: 'Green',
+                max: 255,
+                min: 0,
+                step: 1
+            },
+            blue: {
+                name: 'Blue',
+                max: 255,
+                min: 0,
+                step: 1
+            },
+            lineWeight: {
+                name: 'Line Weight',
+                max: 255,
+                min: 0,
+                step: 1
+            },
         }
     }
 
@@ -80,6 +108,11 @@ class Shape {
         if (props.resolution) {
             this.analyzer.fftSize = Math.pow(2, props.resolution)
         }
+    }
+
+    initDraw() {
+        this.canvasCtx.lineWidth = this.props.lineWeight;
+        this.canvasCtx.strokeStyle = `rgb(${this.props.red},${this.props.green},${this.props.blue})`
     }
 }
 
@@ -145,7 +178,8 @@ export class Circle extends Shape {
 
     draw() {
         this.analyze()
-
+        this.initDraw()
+        this.canvasCtx.beginPath()
         circle(
             this.canvasCtx, 
             this.dataArray,
@@ -157,6 +191,7 @@ export class Circle extends Shape {
             -this.props.a_offset,
             this.props.intensity
         )
+        this.canvasCtx.stroke()
     }
 }
 
@@ -209,7 +244,9 @@ export class Line extends Shape {
 
     draw() {
         this.analyze()
+        this.initDraw()
 
+        this.canvasCtx.beginPath()
         line(
             this.canvasCtx,
             this.dataArray,
@@ -219,5 +256,6 @@ export class Line extends Shape {
             this.props.y_offset,
             this.props.intensity,
         )
+        this.canvasCtx.stroke()
     }
 }

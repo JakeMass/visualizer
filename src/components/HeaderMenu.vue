@@ -129,5 +129,7 @@ function onReplace(value) {
   grid-area: props;
   display: grid;
   grid-auto-flow: column;
+  overflow-x:scroll;
+  gap: 2em;
 }
 </style>

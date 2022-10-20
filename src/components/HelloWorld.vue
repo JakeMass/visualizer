@@ -110,10 +110,6 @@ function draw() {
   canvasCtx.fillStyle = `rgba(0, 0, 0, ${opacity.value})`
   canvasCtx.fillRect(0, 0, canvas.value.width, canvas.value.height)
 
-  canvasCtx.lineWidth = 1
-  canvasCtx.strokeStyle = 'rgb(200, 200, 200)'
-  canvasCtx.beginPath()
-
   shapes.value.forEach(shape => toRaw(shape).draw())
 
   canvasCtx.translate(-0.5, -0.5)
